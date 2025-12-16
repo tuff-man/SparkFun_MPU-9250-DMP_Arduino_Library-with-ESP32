@@ -17,13 +17,11 @@ Supported Platforms:
 *************************************************************/
 #include <SparkFunMPU9250-DMP.h>
 
-#define SerialPort SerialUSB
-
 MPU9250_DMP imu;
 
 void setup() 
 {
-  SerialPort.begin(115200);
+  Serial.begin(115200);
 
   // Call imu.begin() to verify communication with and
   // initialize the MPU-9250 to it's default values.
@@ -33,9 +31,9 @@ void setup()
   {
     while (1)
     {
-      SerialPort.println("Unable to communicate with MPU-9250");
-      SerialPort.println("Check connections, and try again.");
-      SerialPort.println();
+      Serial.println("Unable to communicate with MPU-9250");
+      Serial.println("Check connections, and try again.");
+      Serial.println();
       delay(5000);
     }
   }
@@ -110,13 +108,13 @@ void printIMUData(void)
   float magY = imu.calcMag(imu.my);
   float magZ = imu.calcMag(imu.mz);
   
-  SerialPort.println("Accel: " + String(accelX) + ", " +
+  Serial.println("Accel: " + String(accelX) + ", " +
               String(accelY) + ", " + String(accelZ) + " g");
-  SerialPort.println("Gyro: " + String(gyroX) + ", " +
+  Serial.println("Gyro: " + String(gyroX) + ", " +
               String(gyroY) + ", " + String(gyroZ) + " dps");
-  SerialPort.println("Mag: " + String(magX) + ", " +
+  Serial.println("Mag: " + String(magX) + ", " +
               String(magY) + ", " + String(magZ) + " uT");
-  SerialPort.println("Time: " + String(imu.time) + " ms");
-  SerialPort.println();
+  Serial.println("Time: " + String(imu.time) + " ms");
+  Serial.println();
 }
 

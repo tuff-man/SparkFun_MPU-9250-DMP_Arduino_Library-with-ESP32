@@ -44,11 +44,11 @@
 #define i2c_read(a, b, c, d)  arduino_i2c_read(a, b, c, d)
 #define delay_ms  arduino_delay_ms
 #define get_ms    arduino_get_clock_ms
-#define log_i     _MLPrintLog
-#define log_e     _MLPrintLog 
+// #define log_i     _MLPrintLog 
+// #define log_e     _MLPrintLog 
 static inline int reg_int_cb(struct int_param_s *int_param)
 {
-	
+	return 0;
 }
 
 #if !defined MPU6050 && !defined MPU9150 && !defined MPU6500 && !defined MPU9250
@@ -1361,7 +1361,7 @@ int mpu_set_sample_rate(unsigned short rate)
         st.chip_cfg.sample_rate = 1000 / (1 + data);
 
 #ifdef AK89xx_SECONDARY
-        mpu_set_compass_sample_rate(min(st.chip_cfg.compass_sample_rate, MAX_COMPASS_SAMPLE_RATE));
+        mpu_set_compass_sample_rate(fmin(st.chip_cfg.compass_sample_rate, MAX_COMPASS_SAMPLE_RATE));
 #endif
 
         /* Automatically set LPF to 1/2 sampling rate. */
@@ -2237,7 +2237,7 @@ static int accel_6500_self_test(long *bias_regular, long *bias_st, int debug)
 		if(debug)
 			log_i("Accel:CRITERIA C: bias less than %7.4f\n", accel_offset_max/1.f);
 		for (i = 0; i < 3; i++) {
-			if(fabs(bias_regular[i]) > accel_offset_max) {
+			if(fabs((double)bias_regular[i]) > accel_offset_max) {
 				if(debug)
 					log_i("FAILED: Accel axis:%d = %ld > 500mg\n", i, bias_regular[i]);
 				result |= 1 << i;	//Error condition
@@ -2331,7 +2331,7 @@ static int gyro_6500_self_test(long *bias_regular, long *bias_st, int debug)
 		if(debug)
 			log_i("Gyro:CRITERIA C: bias less than %7.4f\n", gyro_offset_max/1.f);
 		for (i = 0; i < 3; i++) {
-			if(fabs(bias_regular[i]) > gyro_offset_max) {
+			if(fabs((double)bias_regular[i]) > gyro_offset_max) {
 				if(debug)
 					log_i("FAILED: Gyro axis:%d = %ld > 20dps\n", i, bias_regular[i]);
 				result |= 1 << i;	//Error condition
@@ -2789,7 +2789,7 @@ int mpu_load_firmware(unsigned short length, const unsigned char *firmware,
     if (!firmware)
         return -1;
     for (ii = 0; ii < length; ii += this_write) {
-        this_write = min(LOAD_CHUNK, length - ii);
+        this_write = fmin(LOAD_CHUNK, length - ii);
         if (mpu_write_mem(ii, this_write, (unsigned char*)&firmware[ii]))
             return -1;
         if (mpu_read_mem(ii, this_write, cur))

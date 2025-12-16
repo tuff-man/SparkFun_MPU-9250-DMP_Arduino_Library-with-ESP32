@@ -45,7 +45,7 @@ Products that use this Library
 
 Version History
 ---------------
-
+ESP32 시리즈에서 동작하도록 수정함.
 
 License Information
 -------------------
