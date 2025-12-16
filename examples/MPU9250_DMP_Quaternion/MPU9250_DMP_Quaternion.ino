@@ -23,22 +23,20 @@ Supported Platforms:
 *************************************************************/
 #include <SparkFunMPU9250-DMP.h>
 
-#define SerialPort SerialUSB
-
 MPU9250_DMP imu;
 
 void setup() 
 {
-  SerialPort.begin(115200);
+  Serial.begin(115200);
 
   // Call imu.begin() to verify communication and initialize
   if (imu.begin() != INV_SUCCESS)
   {
     while (1)
     {
-      SerialPort.println("Unable to communicate with MPU-9250");
-      SerialPort.println("Check connections, and try again.");
-      SerialPort.println();
+      Serial.println("Unable to communicate with MPU-9250");
+      Serial.println("Check connections, and try again.");
+      Serial.println();
       delay(5000);
     }
   }
@@ -78,12 +76,12 @@ void printIMUData(void)
   float q2 = imu.calcQuat(imu.qy);
   float q3 = imu.calcQuat(imu.qz);
 
-  SerialPort.println("Q: " + String(q0, 4) + ", " +
+  Serial.println("Q: " + String(q0, 4) + ", " +
                     String(q1, 4) + ", " + String(q2, 4) + 
                     ", " + String(q3, 4));
-  SerialPort.println("R/P/Y: " + String(imu.roll) + ", "
+  Serial.println("R/P/Y: " + String(imu.roll) + ", "
             + String(imu.pitch) + ", " + String(imu.yaw));
-  SerialPort.println("Time: " + String(imu.time) + " ms");
-  SerialPort.println();
+  Serial.println("Time: " + String(imu.time) + " ms");
+  Serial.println();
 }
 
